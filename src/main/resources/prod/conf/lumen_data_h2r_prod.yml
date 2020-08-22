@@ -1,0 +1,32 @@
+sparkContextConfig:
+    createSparkSqlContext: false 
+    createHiveContext: true
+
+sparkJobConf:
+    applicationProperties:
+        spark.app.name: LumenExperimentVariations_H2R
+        spark.yarn.executor.memoryOverhead: 3072
+        spark.sql.shuffle.partitions: 300
+        spark.sql.parquet.compression.codec: snappy
+        spark.speculation: false
+
+hadoopConfiguration:
+    parquet.enable.summary-metadata: false
+    spark.sql.parquet.output.committer.class: org.apache.spark.sql.parquet.DirectParquetOutputCommitter
+    spark.hadoop.mapred.output.committer.class: org.apache.hadoop.mapred.DirectFileOutputCommitter
+
+yarnConfiguration:
+    spark.yarn.queue: default
+
+env: prod
+
+my:
+    -
+        hive:  SELECT experiment_id, experiment_name, status, start_date, end_date, current_date as dt from omniture_reporting.experiments
+        redshift:  omniture_rpt.experiments
+        deleteWhere: dt <= (select max(dt) as dt from ${STAGING})
+
+    -
+        hive:  SELECT variation_id, experiment_id, experiment_variation, default_indicator, current_date as dt from omniture_reporting.experiment_variations
+        redshift:  omniture_rpt.variations
+        deleteWhere: dt <= (select max(dt) as dt from ${STAGING})

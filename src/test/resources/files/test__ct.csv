@@ -1,0 +1,2 @@
+header__change_seq:INT,header__change_oper:VARCHAR(1),header__change_mask:VARCHAR,header__stream_position:VARCHAR(128),header__operation:VARCHAR(12),header__transaction_id:VARCHAR(32),header__timestamp:TIMESTAMP,EmailRequestGuid:VARCHAR(36),RequestDate:TIMESTAMP
+20,"I",01FFFF80,"001c5b66:0001c9d3:000e","INSERT","0000000000000000000000005784EF52",2016-01-01 00:00:00.000,"127B9E6F-F984-472A-8682-B527AF8D2D14",2015-11-17 23:39:24.480

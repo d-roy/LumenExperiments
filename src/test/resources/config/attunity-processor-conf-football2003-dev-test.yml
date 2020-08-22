@@ -1,0 +1,71 @@
+sparkContextConfig:
+ createSparkSqlContext: true
+ createHiveContext: true
+
+sparkJobConf:
+ applicationProperties:
+    spark.app.name: Attunity-Data-Processor-Football2003-TEST
+    spark.storage.memoryFraction: 0.4
+    spark.shuffle.memoryFraction: 0.4
+    spark.driver.maxResultSize: 3g
+    spark.yarn.executor.memoryOverhead: 1024
+    spark.sql.parquet.compression.codec: snappy
+    spark.speculation: false
+
+hadoopConfiguration:
+    textinputformat.record.delimiter: "\x1e"
+    parquet.enable.summary-metadata: false
+    spark.sql.parquet.output.committer.class: org.apache.spark.sql.parquet.DirectParquetOutputCommitter
+    spark.hadoop.mapred.output.committer.class: org.apache.hadoop.mapred.DirectFileOutputCommitter
+
+yarnConfiguration:
+    spark.yarn.queue: default
+
+csvFileInputConfig:
+    format: com.databricks.spark.csv
+    mode: DROPMALFORMED
+    header: true  
+    delimiter: "\x1f"
+    quote: "\x22"
+    escape: \
+
+
+parquetOutputConfig:
+    directoryPath: attunity-bots/attunity-data-processor/data
+    reRunPartition: 6
+    dbrunpartition: 12
+    saveMode: Overwrite
+
+sqsMessageOperatorConfig:
+   url: https://sqs.us-east-1.amazonaws.com/702226105286/AttunityFootball2003
+   maxMessages: 100
+   maxRequests: 50
+
+snsMessageConfig:
+   topicArn: arn:aws:sns:us-east-1:361160291213:AttunityDEVFootball2003DataReady
+
+snsErrorMessageConfig:
+   topicArn: arn:aws:sns:us-east-1:361160291213:AttunityDevBotsTestAlerts
+
+schemaConfig: s3://fanatics.dev.internal.confidential/attunity-bots/attunity-data-processor/schema
+
+counterBasePath: s3://fanatics.dev.internal.confidential/attunity-bots/attunity-data-processor/batch_info/db=football2003
+
+dictionaryPath: s3://fanatics.dev.internal.confidential/attunity-bots/attunity-data-processor/dictionary/football2003
+
+baseDir: s3n://
+
+csvProcessorConfig:
+  partitionColumn: header__timestamp
+  dropColumns: header__change_seq,header__change_mask,header__stream_position,header__operation,header__transaction_id
+  filterRows:
+  header__change_oper: B
+  replace: 
+    oldValue :
+    newValue:
+
+dbConfiguration :
+ driver: org.postgresql.Driver
+ url: jdbc:postgresql://dataplatforms-batch.ch8hux0zznqj.us-east-1.rds.amazonaws.com/attunitybots
+ username: attunitybot
+ password: bot!2016

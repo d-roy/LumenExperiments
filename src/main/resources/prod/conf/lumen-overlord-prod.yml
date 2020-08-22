@@ -1,0 +1,17 @@
+lumen_experiments:
+  task: QuboleSpark
+  cooldown: 120
+  configuration:
+    X-AUTH-TOKEN: ${QUBOLE_AUTH_TOKEN}
+    use_proxy: true
+    label: ci-spark22
+    jar_file: s3://fanatics.prod.internal.confidential/LumenExperiments/jar/lumen-experiments-assembly-${VERSION}.jar
+    options:
+      - class com.fanatics.data.platform.lumen.experiments.LumenDataGenerator
+      - master yarn-client
+      - max-executors ${maxexecutors}
+      - num-executors ${executors}
+      - driver-memory 5g
+      - executor-memory ${executormemory}
+      - executor-cores ${executorcores}
+    arguments: run -c s3://fanatics.prod.internal.confidential/LumenExperiments/config/lumen-spark-conf-prod.yml

@@ -1,0 +1,36 @@
+sparkContextConfig:
+ createSparkSqlContext: true
+ createHiveContext: true
+
+sparkJobConf:
+ applicationProperties:
+    spark.app.name: LumenExperiments
+    spark.storage.memoryFraction: 0.4
+    spark.shuffle.memoryFraction: 0.4
+    spark.driver.maxResultSize: 3g
+    spark.yarn.executor.memoryOverhead: 1024
+    spark.sql.parquet.compression.codec: snappy
+    spark.speculation: false
+    hive.exec.dynamic.partition.mode: nonstrict
+
+
+hadoopConfiguration:
+    textinputformat.record.delimiter: "\x1e"
+    parquet.enable.summary-metadata: false
+    spark.sql.parquet.output.committer.class: org.apache.spark.sql.parquet.DirectParquetOutputCommitter
+    spark.hadoop.mapred.output.committer.class: org.apache.hadoop.mapred.DirectFileOutputCommitter
+
+yarnConfiguration:
+    spark.yarn.queue: default
+
+dictionaryUrl: http://dictionary-public.dev.frganalytics.com/partitions/LumenAPI.ExperimentDataset
+apiKey: 94df3b8a499d5b3fdcc0915d3ffa3877
+subscriptionId: 0ccac3645507f9eeda70f2dc5b9d01f1
+meta_file: s3://fanatics.dev.internal.confidential/LumenExperiments/meta/lumen_last_dt.txt
+meta_file2: s3://fanatics.dev.internal.confidential/LumenExperiments/meta/spark_proc_status.txt
+
+experiments_start_save_path: s3://fanatics.dev.internal.confidential/omniture_report_testing/data/experiments
+experiment_variations_save_path: s3://fanatics.dev.internal.confidential/omniture_report_testing/data/experiment_variations
+
+experimentsTable: omniture_reporting.experiments
+experimentVariationsTable: omniture_reporting.experiment_variations

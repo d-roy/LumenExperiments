@@ -1,0 +1,62 @@
+sparkContextConfig:
+ createSparkSqlContext: true 
+
+sparkJobConf:
+ applicationProperties:
+    spark.app.name: Attunity-Data-Processor
+    spark.master: local[*]
+    spark.sql.parquet.compression.codec: snappy
+
+
+hadoopConfiguration:
+    parquet.enable.summary-metadata: false
+
+yarnConfiguration:
+    spark.yarn.queue: default
+
+
+csvFileInputConfig:
+    format: com.databricks.spark.csv
+    header: true  
+    mode: DROPMALFORMED
+    delimiter: ","
+    quote: "\x22"
+    escape: \
+    
+
+parquetOutputConfig:
+    directoryPath: src/test/resources/data
+    rePartition: 1
+    saveMode: Append
+
+snsMessageConfig:
+   topicArn: arn:aws:sns:us-east-1:702226105286:AttunityDataPost
+
+snsErrorMessageConfig:
+   topicArn: arn:aws:sns:us-east-1:395033687213:AttunityBotsTestAlerts
+
+
+schemaConfig: src/test/resources/schema
+
+counterBasePath: src/test/resources/counter
+
+dictionaryPath: src/test/rescources/dictionary
+
+baseDir: src/test/resources/
+
+
+csvProcessorConfig:
+  partitionColumn: header__timestamp
+  dropColumns: header__change_seq,header__change_mask,header__stream_position,header__operation,header__transaction_id
+  filterRows:
+  header__change_oper: B
+  replace: 
+    oldValue : \\"
+    newValue: \"
+
+
+dbConfiguration :
+ driver: org.postgresql.Driver
+ url: jdbc:postgresql://10.142.5.66/postgres
+ username: postgres
+ password: Live1234
